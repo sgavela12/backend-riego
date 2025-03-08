@@ -49,6 +49,17 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+
+
+<dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.24</version> <!-- Usa la versión más reciente disponible -->
+        <scope>provided</scope>
+    </dependency>
+
+
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -59,6 +70,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -69,5 +81,11 @@
 			</plugin>
 		</plugins>
 	</build>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 
 </project>
