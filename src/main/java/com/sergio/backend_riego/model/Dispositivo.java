@@ -1,4 +1,6 @@
 package com.sergio.backend_riego.model;
+
+
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -6,7 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,9 +32,14 @@ public class Dispositivo {
     private String ubicacion; // Lugar donde está instalado el dispositivo
     private Boolean estado; // Estado: activo/inactivo
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User usuario; // Relación con el usuario que tiene el dispositivo
+    // Relación muchos a muchos con los usuarios
+    @ManyToMany
+    @JoinTable(
+        name = "dispositivos_usuarios", // Nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "dispositivo_id"),
+        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<User> usuarios; // Lista de usuarios asociados al dispositivo
 
     // Relación con las lecturas de los sensores (SensorData)
     @OneToMany(mappedBy = "dispositivo")
@@ -40,5 +48,4 @@ public class Dispositivo {
     // Relación con los eventos de riego
     @OneToMany(mappedBy = "dispositivo")
     private List<Riego> riegos;
-
 }

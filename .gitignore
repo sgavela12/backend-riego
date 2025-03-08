@@ -36,4 +36,9 @@ build/
 # Ignorar application.properties
 src/main/resources/application.properties
 
+src/main/java/com/sergio/backend_riego/config/IpFilter.java
+
+
 .env
+
+

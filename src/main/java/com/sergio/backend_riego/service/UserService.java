@@ -25,6 +25,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    // Obtener un usuario por ID
+    public Optional<User> getUserByName(String name) {
+        return userRepository.findByName(name);
+    }
+
     // Crear o actualizar un usuario
     public User saveUser(User user) {
         return userRepository.save(user);

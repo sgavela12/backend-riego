@@ -31,9 +31,20 @@ public class UserController {
     }
 
     // Obtener un usuario por ID
-    @GetMapping("/{id}")
+    @GetMapping("id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Obtener un usuario por ID
+    @GetMapping("name/{name}")
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+        Optional<User> user = userService.getUserByName(name);
         if (user.isPresent()) {
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         } else {
