@@ -1,10 +1,15 @@
 package com.sergio.backend_riego.config;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule; // Importa el módulo
+import com.sergio.backend_riego.model.SensorData;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,22 +17,50 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RiegoWebSocketHandler extends TextWebSocketHandler {
 
     private static final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private final ObjectMapper objectMapper = new ObjectMapper(); // Para convertir objetos a JSON
 
     public RiegoWebSocketHandler() {
+        // Registrar el módulo JavaTimeModule en el ObjectMapper
+        objectMapper.registerModule(new JavaTimeModule());
+
         // Simular datos cada 5 segundos
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 try {
-                    String mensaje = "Sensor: " + (Math.random() * 100); // Simular valor del sensor
-                    System.out.println("Enviando: " + mensaje);
-                    broadcast(mensaje);
+                    // Simular varias lecturas de sensores
+                    List<SensorData> lecturas = new ArrayList<>();
+
+                    // Lectura 1
+                    SensorData lectura1 = new SensorData();
+                    lectura1.setValor(Math.round(Math.random() * 100.0) / 100.0);
+                    lectura1.setFechaHora(LocalDateTime.now());
+                    lectura1.setTipoParametro("Temperatura");
+                    lectura1.setUnidad("°C");
+                    // Aquí podrías asignar un dispositivo si lo necesitas
+                    lecturas.add(lectura1);
+                    System.out.println("PRUEBA = " + LocalDateTime.now());
+
+                    // Lectura 2
+                    SensorData lectura2 = new SensorData();
+                    lectura2.setValor(Math.round(Math.random() * 100.0) / 100.0);
+                    lectura2.setFechaHora(LocalDateTime.now());
+                    lectura2.setTipoParametro("Humedad");
+                    lectura2.setUnidad("%");
+                    lecturas.add(lectura2);
+
+                 
+                    // Convertir la lista de lecturas a JSON
+                    String jsonMessage = objectMapper.writeValueAsString(lecturas);
+
+                    System.out.println("Enviando: " + jsonMessage);
+                    broadcast(jsonMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5000); // Enviar cada 5 segundos
+        }, 0, 15000); // Enviar cada 5 segundos
     }
 
     @Override
