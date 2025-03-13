@@ -35,6 +35,10 @@ public class Planta {
     @Column(name = "fecha_plantacion", nullable = false)
     private LocalDateTime fechaPlantacion;
 
+    @Column(name = "humedad")
+    private Integer humedad;
+
+
     @Column(name = "necesita_agua", nullable = false)
     private boolean necesitaAgua;
 
