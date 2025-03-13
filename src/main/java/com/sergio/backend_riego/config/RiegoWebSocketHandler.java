@@ -34,7 +34,7 @@ public class RiegoWebSocketHandler extends TextWebSocketHandler {
 
                     // Lectura 1
                     SensorData lectura1 = new SensorData();
-                    lectura1.setValor(Math.round(Math.random() * 100.0) / 100.0);
+                    lectura1.setValor(Math.round((Math.random() * 50 - 10) * 100.0) / 100.0);
                     lectura1.setFechaHora(LocalDateTime.now());
                     lectura1.setTipoParametro("Temperatura");
                     lectura1.setUnidad("°C");
@@ -44,7 +44,7 @@ public class RiegoWebSocketHandler extends TextWebSocketHandler {
 
                     // Lectura 2
                     SensorData lectura2 = new SensorData();
-                    lectura2.setValor(Math.round(Math.random() * 100.0) / 100.0);
+                    lectura2.setValor(Math.round(Math.random() * 101 * 100.0) / 100.0);
                     lectura2.setFechaHora(LocalDateTime.now());
                     lectura2.setTipoParametro("Humedad");
                     lectura2.setUnidad("%");
@@ -60,7 +60,7 @@ public class RiegoWebSocketHandler extends TextWebSocketHandler {
                     e.printStackTrace();
                 }
             }
-        }, 0, 15000); // Enviar cada 5 segundos
+        }, 0, 5000); // Enviar cada 5 segundos
     }
 
     @Override
