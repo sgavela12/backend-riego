@@ -5,6 +5,7 @@ import com.sergio.backend_riego.model.Planta;
 import com.sergio.backend_riego.service.PlantaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,5 +72,33 @@ public class PlantaController {
     public ResponseEntity<Void> eliminarPlanta(@PathVariable Long id) {
         plantaService.deletePlanta(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Nuevo endpoint para regar una planta
+    @GetMapping("/{id}/regar")
+    public ResponseEntity<String> regarPlanta(@PathVariable Long id) {
+        Optional<Planta> plantaOptional = plantaService.getPlantaById(id);
+
+        if (plantaOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Planta planta = plantaOptional.get();
+        if (planta.getDispositivo() == null) {
+            return ResponseEntity.badRequest().body("La planta no tiene un dispositivo asociado.");
+        }
+
+        Long dispositivoId = planta.getDispositivo().getId();
+
+        // Llamar al endpoint externo
+        String url = "http://192.168.1.146/activar?bomba=" + dispositivoId;
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            String respuesta = restTemplate.getForObject(url, String.class);
+            return ResponseEntity.ok("Riego activado: " + respuesta);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al activar el riego: " + e.getMessage());
+        }
     }
 }
