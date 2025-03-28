@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sergio.backend_riego.dto.PlantaDTO;
 import com.sergio.backend_riego.model.Planta;
 import com.sergio.backend_riego.repository.PlantaRepository;
 
@@ -40,4 +41,22 @@ public class PlantaService {
     public void deletePlanta(Long id) {
         plantaRepository.deleteById(id);
     }
+
+    public PlantaDTO convertirAPlantaDTO(Planta planta) {
+    PlantaDTO dto = new PlantaDTO();
+    dto.setId(planta.getId());
+    dto.setNombre(planta.getNombre());
+    dto.setTipo(planta.getTipo());
+    dto.setFechaPlantacion(planta.getFechaPlantacion());
+    dto.setHumedad(planta.getHumedad());
+    dto.setNecesitaAgua(planta.isNecesitaAgua());
+    
+    // Verificamos si el dispositivo no es null para evitar errores
+    if (planta.getDispositivo() != null) {
+        dto.setDispositivoId(planta.getDispositivo().getId());
+    }
+
+    return dto;
+}
+
 }
