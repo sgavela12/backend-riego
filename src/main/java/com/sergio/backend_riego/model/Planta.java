@@ -38,15 +38,18 @@ public class Planta {
     @Column(name = "humedad")
     private Integer humedad;
 
-
     @Column(name = "necesita_agua", nullable = false)
     private boolean necesitaAgua;
 
+    // Relación con la entidad Bomba
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dispositivo_id")
-    private Dispositivo dispositivo; // Relación con la clase Dispositivo
+    @JoinColumn(name = "bomba_id", nullable = false)
+    private Dispositivo bomba;
 
-    
+    // Relación con la entidad Sensor
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sensor_id", nullable = false)
+    private Dispositivo sensor;
 
     public void setFechaPlantacion(LocalDateTime fechaPlantacion) {
         this.fechaPlantacion = fechaPlantacion;

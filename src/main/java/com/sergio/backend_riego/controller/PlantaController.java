@@ -17,6 +17,7 @@ public class PlantaController {
 
     private final PlantaService plantaService;
 
+    // Constructor corregido
     public PlantaController(PlantaService plantaService) {
         this.plantaService = plantaService;
     }
@@ -30,10 +31,15 @@ public class PlantaController {
         dto.setFechaPlantacion(planta.getFechaPlantacion());
         dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
-        
-        if (planta.getDispositivo() != null) {
-            dto.setDispositivoId(planta.getDispositivo().getId());
+
+        // Verificar y asignar los IDs de la bomba y el sensor
+        if (planta.getBomba() != null) {
+            dto.setBombaId(planta.getBomba().getId());
         }
+        if (planta.getSensor() != null) {
+            dto.setSensorId(planta.getSensor().getId());
+        }
+
         return dto;
     }
 
@@ -84,14 +90,14 @@ public class PlantaController {
         }
 
         Planta planta = plantaOptional.get();
-        if (planta.getDispositivo() == null) {
-            return ResponseEntity.badRequest().body("La planta no tiene un dispositivo asociado.");
+        if (planta.getBomba() == null) {
+            return ResponseEntity.badRequest().body("La planta no tiene una bomba asociada.");
         }
 
-        Long dispositivoId = planta.getDispositivo().getId();
+        Long bombaId = planta.getBomba().getId();
 
         // Llamar al endpoint externo
-        String url = "http://192.168.1.146/activar?bomba=" + dispositivoId;
+        String url = "http://192.168.1.146/activar?bomba=" + bombaId;
         RestTemplate restTemplate = new RestTemplate();
 
         try {

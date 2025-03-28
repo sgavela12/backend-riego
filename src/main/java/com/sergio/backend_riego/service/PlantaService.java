@@ -15,8 +15,6 @@ public class PlantaService {
     @Autowired
     private PlantaRepository plantaRepository;
 
-    
-
     // Obtener todas las plantas
     public List<Planta> getAllPlantas() {
         return plantaRepository.findAll();
@@ -42,21 +40,24 @@ public class PlantaService {
         plantaRepository.deleteById(id);
     }
 
+    // Convertir una entidad Planta a un DTO
     public PlantaDTO convertirAPlantaDTO(Planta planta) {
-    PlantaDTO dto = new PlantaDTO();
-    dto.setId(planta.getId());
-    dto.setNombre(planta.getNombre());
-    dto.setTipo(planta.getTipo());
-    dto.setFechaPlantacion(planta.getFechaPlantacion());
-    dto.setHumedad(planta.getHumedad());
-    dto.setNecesitaAgua(planta.isNecesitaAgua());
-    
-    // Verificamos si el dispositivo no es null para evitar errores
-    if (planta.getDispositivo() != null) {
-        dto.setDispositivoId(planta.getDispositivo().getId());
+        PlantaDTO dto = new PlantaDTO();
+        dto.setId(planta.getId());
+        dto.setNombre(planta.getNombre());
+        dto.setTipo(planta.getTipo());
+        dto.setFechaPlantacion(planta.getFechaPlantacion());
+        dto.setHumedad(planta.getHumedad());
+        dto.setNecesitaAgua(planta.isNecesitaAgua());
+
+        // Verificar y asignar los IDs de la bomba y el sensor
+        if (planta.getBomba() != null) {
+            dto.setBombaId(planta.getBomba().getId());
+        }
+        if (planta.getSensor() != null) {
+            dto.setSensorId(planta.getSensor().getId());
+        }
+
+        return dto;
     }
-
-    return dto;
-}
-
 }

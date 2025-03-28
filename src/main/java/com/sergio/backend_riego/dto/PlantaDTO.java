@@ -12,5 +12,6 @@ public class PlantaDTO {
     private LocalDateTime fechaPlantacion;
     private Integer humedad;
     private boolean necesitaAgua;
-    private Long dispositivoId; 
+    private Long bombaId;  
+    private Long sensorId; 
 }
