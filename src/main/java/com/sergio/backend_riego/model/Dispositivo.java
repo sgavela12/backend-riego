@@ -16,6 +16,8 @@ import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -44,9 +46,13 @@ public class Dispositivo {
 
     // Relación con las plantas que usan este dispositivo como sensor
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
+    @JsonIgnore // Evita la serialización de las plantas asociadas como sensores
+    @ToString.Exclude // Evita la recursión infinita
     private List<Planta> plantasComoSensor;
 
     // Relación con las plantas que usan este dispositivo como bomba
     @OneToMany(mappedBy = "bomba", cascade = CascadeType.ALL)
+    @JsonIgnore // Evita la serialización de las plantas asociadas como bombas
+    @ToString.Exclude // Evita la recursión infinita
     private List<Planta> plantasComoBomba;
 }

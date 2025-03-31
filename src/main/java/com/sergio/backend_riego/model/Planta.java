@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -44,12 +46,15 @@ public class Planta {
     // Relación con la entidad Bomba
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bomba_id", nullable = false)
+    @ToString.Exclude // Evita la recursión infinita
+    @JsonIgnore // Evita la serialización de la bomba en JSON
     private Dispositivo bomba;
 
     // Relación con la entidad Sensor
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sensor_id", nullable = false)
+    @ToString.Exclude // Evita la recursión infinita
+    @JsonIgnore // Evita la serialización del sensor en JSON
     private Dispositivo sensor;
-
 
 }

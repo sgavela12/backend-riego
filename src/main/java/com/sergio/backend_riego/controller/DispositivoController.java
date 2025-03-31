@@ -1,13 +1,16 @@
 package com.sergio.backend_riego.controller;
 
 
+import com.sergio.backend_riego.dto.PlantaDTO;
 import com.sergio.backend_riego.model.Dispositivo;
+import com.sergio.backend_riego.model.Planta;
 import com.sergio.backend_riego.service.DispositivoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/dispositivos")
@@ -23,8 +26,12 @@ public class DispositivoController {
     // Obtener todos los dispositivos
     @GetMapping
     public List<Dispositivo> obtenerDispositivos() {
-        return dispositivoService.getAllDispositivos();
+        List<Dispositivo> dispositivos = dispositivoService.getAllDispositivos();
+        System.out.println("Dispositivos desde la base de datos: " + dispositivos);
+        return dispositivos;
     }
+
+  
 
     // Obtener un dispositivo por ID
     @GetMapping("/{id}")
