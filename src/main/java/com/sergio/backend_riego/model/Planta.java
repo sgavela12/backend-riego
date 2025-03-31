@@ -33,7 +33,7 @@ public class Planta {
     private String tipo;
 
     @Column(name = "fecha_plantacion", nullable = false)
-    private LocalDateTime fechaPlantacion;
+    private LocalDateTime fechaPlantacion; // Campo para la fecha de plantación
 
     @Column(name = "humedad")
     private Integer humedad;
@@ -51,7 +51,5 @@ public class Planta {
     @JoinColumn(name = "sensor_id", nullable = false)
     private Dispositivo sensor;
 
-    public void setFechaPlantacion(LocalDateTime fechaPlantacion) {
-        this.fechaPlantacion = fechaPlantacion;
-    }
+
 }

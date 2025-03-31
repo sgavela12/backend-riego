@@ -53,9 +53,14 @@ public class PlantaService {
         // Verificar y asignar los IDs de la bomba y el sensor
         if (planta.getBomba() != null) {
             dto.setBombaId(planta.getBomba().getId());
+        } else {
+            dto.setBombaId(null); 
         }
+
         if (planta.getSensor() != null) {
             dto.setSensorId(planta.getSensor().getId());
+        } else {
+            dto.setSensorId(null); 
         }
 
         return dto;

@@ -6,6 +6,7 @@ import com.sergio.backend_riego.service.PlantaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,7 +18,6 @@ public class PlantaController {
 
     private final PlantaService plantaService;
 
-    // Constructor corregido
     public PlantaController(PlantaService plantaService) {
         this.plantaService = plantaService;
     }
