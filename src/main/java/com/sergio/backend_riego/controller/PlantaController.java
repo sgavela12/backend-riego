@@ -1,8 +1,12 @@
 package com.sergio.backend_riego.controller;
 
 import com.sergio.backend_riego.dto.PlantaDTO;
+import com.sergio.backend_riego.model.Dispositivo;
 import com.sergio.backend_riego.model.Planta;
+import com.sergio.backend_riego.model.Riego;
+import com.sergio.backend_riego.service.DispositivoService;
 import com.sergio.backend_riego.service.PlantaService;
+import com.sergio.backend_riego.service.RiegoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -17,9 +21,13 @@ import java.util.stream.Collectors;
 public class PlantaController {
 
     private final PlantaService plantaService;
+    private final RiegoService riegoService;
+    private final DispositivoService dispositivoService;
 
-    public PlantaController(PlantaService plantaService) {
+    public PlantaController(PlantaService plantaService, RiegoService riegoService, DispositivoService dispositivoService) {
         this.plantaService = plantaService;
+        this.riegoService = riegoService;
+        this.dispositivoService = dispositivoService;
     }
 
     // Método para convertir una Planta a PlantaDTO
@@ -107,5 +115,30 @@ public class PlantaController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al activar el riego: " + e.getMessage());
         }
+    }
+
+    // Nuevo endpoint para registrar un riego
+    @PostMapping("/riego")
+    public ResponseEntity<String> registrarRiego(@RequestBody Riego riego) {
+        // Validar planta
+        Optional<Planta> plantaOptional = plantaService.getPlantaById(riego.getPlanta().getId());
+        if (plantaOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("La planta con ID " + riego.getPlanta().getId() + " no existe.");
+        }
+
+        // Validar dispositivo
+        Optional<Dispositivo> dispositivoOptional = dispositivoService.getDispositivoById(riego.getDispositivo().getId());
+        if (dispositivoOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("El dispositivo con ID " + riego.getDispositivo().getId() + " no existe.");
+        }
+
+        // Asignar las entidades validadas al objeto Riego
+        riego.setPlanta(plantaOptional.get());
+        riego.setDispositivo(dispositivoOptional.get());
+
+        // Guardar en la base de datos
+        riegoService.registrarRiego(riego);
+
+        return ResponseEntity.ok("Riego registrado exitosamente.");
     }
 }
