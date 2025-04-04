@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/plantas")
@@ -110,26 +111,41 @@ public class PlantaController {
 
         try {
             String respuesta = restTemplate.getForObject(url, String.class);
-            return ResponseEntity.ok("Riego activado: " + respuesta);
-            
+
+            // Crear un nuevo registro en la tabla Riego
+            Riego nuevoRiego = new Riego();
+            nuevoRiego.setEstado("exitoso"); // Estado del riego
+            nuevoRiego.setFechaHora(LocalDateTime.now()); // Fecha y hora actual
+            nuevoRiego.setPlanta(planta); // Asignar la planta
+            nuevoRiego.setDispositivo(planta.getBomba()); // Asignar la bomba como dispositivo
+
+            // Guardar el registro en la base de datos
+            riegoService.registrarRiego(nuevoRiego);
+
+            // Actualizar el campo ultimoRiego en la tabla Planta
+            planta.setUltimoRiego(nuevoRiego.getFechaHora());
+            plantaService.savePlanta(planta);
+
+            return ResponseEntity.ok("Riego activado: " + respuesta + ". Registro creado en la tabla Riego.");
+
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al activar el riego: " + e.getMessage());
         }
     }
 
-    // Nuevo endpoint para registrar un riego
+    
     @PostMapping("/riego")
     public ResponseEntity<String> registrarRiego(@RequestBody Riego riego) {
-        // Validar planta
-        Optional<Planta> plantaOptional = plantaService.getPlantaById(riego.getPlanta().getId());
-        if (plantaOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("La planta con ID " + riego.getPlanta().getId() + " no existe.");
-        }
-
-        // Validar dispositivo
+        // Validar dispositivo (bomba)
         Optional<Dispositivo> dispositivoOptional = dispositivoService.getDispositivoById(riego.getDispositivo().getId());
         if (dispositivoOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("El dispositivo con ID " + riego.getDispositivo().getId() + " no existe.");
+        }
+
+        // Buscar la planta asociada al dispositivo (bomba)
+        Optional<Planta> plantaOptional = plantaService.getPlantaByBombaId(riego.getDispositivo().getId());
+        if (plantaOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("No se encontró una planta asociada al dispositivo con ID " + riego.getDispositivo().getId());
         }
 
         // Asignar las entidades validadas al objeto Riego

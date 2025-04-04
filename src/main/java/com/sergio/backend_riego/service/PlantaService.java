@@ -30,6 +30,11 @@ public class PlantaService {
         return plantaRepository.findByNombre(nombre);
     }
 
+    // Obtener una planta por bomba ID
+    public Optional<Planta> getPlantaByBombaId(Long bombaId) {
+        return plantaRepository.findByBombaId(bombaId);
+    }
+
     // Crear o actualizar una planta
     public Planta savePlanta(Planta planta) {
         return plantaRepository.save(planta);
