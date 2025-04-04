@@ -154,6 +154,9 @@ public class PlantaController {
         riego.setPlanta(planta);
         riego.setDispositivo(dispositivo);
 
+        // Generar la fecha y hora dinámicamente
+        riego.setFechaHora(LocalDateTime.now());
+
         // Guardar en la base de datos
         riegoService.registrarRiego(riego);
 
