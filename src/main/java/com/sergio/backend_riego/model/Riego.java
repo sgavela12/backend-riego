@@ -25,8 +25,6 @@ public class Riego {
     private Long id;
 
     private LocalDateTime fechaHora; // Fecha y hora del evento de riego
-    private Double cantidadAgua; // Cantidad de agua utilizada (en litros, por ejemplo)
-    private Integer duracion; // Duración del riego en minutos, por ejemplo
     private String estado; // Estado del riego: "exitoso", "fallido", etc.
     
     @ManyToOne
