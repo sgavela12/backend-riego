@@ -9,7 +9,7 @@ public class PlantaDTO {
     private Long id;
     private String nombre;
     private String tipo;
-    private LocalDateTime fechaPlantacion;
+    private LocalDateTime ultimoRiego;
     private Integer humedad;
     private boolean necesitaAgua;
     private Long bombaId;  

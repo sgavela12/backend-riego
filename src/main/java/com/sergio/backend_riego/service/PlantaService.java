@@ -46,7 +46,7 @@ public class PlantaService {
         dto.setId(planta.getId());
         dto.setNombre(planta.getNombre());
         dto.setTipo(planta.getTipo());
-        dto.setFechaPlantacion(planta.getUltimoRiego());
+        dto.setUltimoRiego(planta.getUltimoRiego());
         dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
 

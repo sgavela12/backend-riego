@@ -36,7 +36,7 @@ public class PlantaController {
         dto.setId(planta.getId());
         dto.setNombre(planta.getNombre());
         dto.setTipo(planta.getTipo());
-        dto.setFechaPlantacion(planta.getUltimoRiego());
+        dto.setUltimoRiego(planta.getUltimoRiego());
         dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
 
@@ -133,12 +133,18 @@ public class PlantaController {
         }
 
         // Asignar las entidades validadas al objeto Riego
-        riego.setPlanta(plantaOptional.get());
-        riego.setDispositivo(dispositivoOptional.get());
+        Planta planta = plantaOptional.get();
+        Dispositivo dispositivo = dispositivoOptional.get();
+        riego.setPlanta(planta);
+        riego.setDispositivo(dispositivo);
 
         // Guardar en la base de datos
         riegoService.registrarRiego(riego);
 
-        return ResponseEntity.ok("Riego registrado exitosamente.");
+        // Actualizar el campo ultimoRiego en la tabla Planta
+        planta.setUltimoRiego(riego.getFechaHora());
+        plantaService.savePlanta(planta);
+
+        return ResponseEntity.ok("Riego registrado exitosamente y campo 'ultimoRiego' actualizado.");
     }
 }
