@@ -34,8 +34,8 @@ public class Planta {
     @Column(name = "tipo", nullable = false, length = 50)
     private String tipo;
 
-    @Column(name = "fecha_plantacion", nullable = false)
-    private LocalDateTime fechaPlantacion; // Campo para la fecha de plantación
+    @Column(name = "ultimo_riego", nullable = true) 
+    private LocalDateTime ultimoRiego;
 
     @Column(name = "humedad")
     private Integer humedad;

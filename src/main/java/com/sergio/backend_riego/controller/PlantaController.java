@@ -28,7 +28,7 @@ public class PlantaController {
         dto.setId(planta.getId());
         dto.setNombre(planta.getNombre());
         dto.setTipo(planta.getTipo());
-        dto.setFechaPlantacion(planta.getFechaPlantacion());
+        dto.setFechaPlantacion(planta.getUltimoRiego());
         dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
 
@@ -103,6 +103,7 @@ public class PlantaController {
         try {
             String respuesta = restTemplate.getForObject(url, String.class);
             return ResponseEntity.ok("Riego activado: " + respuesta);
+            
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al activar el riego: " + e.getMessage());
         }
