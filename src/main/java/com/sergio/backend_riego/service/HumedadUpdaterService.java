@@ -18,7 +18,8 @@ public class HumedadUpdaterService {
         this.plantaRepository = plantaRepository;
     }
 
-    @Scheduled(fixedRate = 40000) // Ejecutar cada x segundos
+    @Scheduled(fixedRate = 40000) // Ejecutar cada 40 segundos (para pruebas)
+    // @Scheduled(cron = "0 0 */6 * * *") // Ejecutar cada 6 horas 
     public void actualizarHumedad() {
         System.out.println("Ejecutando tarea programada para actualizar la humedad...");
         RestTemplate restTemplate = new RestTemplate();

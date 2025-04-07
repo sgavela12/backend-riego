@@ -1,5 +1,22 @@
 package com.sergio.backend_riego.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import com.sergio.backend_riego.dto.PlantaDTO;
 import com.sergio.backend_riego.model.Dispositivo;
 import com.sergio.backend_riego.model.Planta;
@@ -7,14 +24,6 @@ import com.sergio.backend_riego.model.Riego;
 import com.sergio.backend_riego.service.DispositivoService;
 import com.sergio.backend_riego.service.PlantaService;
 import com.sergio.backend_riego.service.RiegoService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/plantas")
@@ -133,7 +142,31 @@ public class PlantaController {
         }
     }
 
-    
+    @GetMapping("/{id}/registros")
+    public ResponseEntity<List<Map<String, Object>>> obtenerRiegosPorPlanta(@PathVariable Long id) {
+        // Buscar la planta por ID
+        Optional<Planta> plantaOptional = plantaService.getPlantaById(id);
+        if (plantaOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Obtener los riegos asociados a la planta
+        List<Riego> riegos = riegoService.getRiegosByPlantaId(id);
+
+        // Transformar los riegos a un formato JSON con solo estado y fechaHora
+        List<Map<String, Object>> riegosJson = riegos.stream()
+            .map(riego -> {
+                Map<String, Object> map = Map.of(
+                    "estado", riego.getEstado(),
+                    "fechaHora", riego.getFechaHora()
+                );
+                return (Map<String, Object>) map;
+            })
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(riegosJson);
+    }
+
     @PostMapping("/riego")
     public ResponseEntity<String> registrarRiego(@RequestBody Riego riego) {
         // Validar dispositivo (bomba)
