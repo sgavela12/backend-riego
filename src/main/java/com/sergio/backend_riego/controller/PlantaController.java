@@ -199,4 +199,19 @@ public class PlantaController {
 
         return ResponseEntity.ok("Riego registrado exitosamente y campo 'ultimoRiego' actualizado.");
     }
+
+    @GetMapping("/ambiente")
+    public ResponseEntity<String> obtenerAmbiente() {
+        String url = "http://192.168.1.146/ambiente";
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            // Realizar la solicitud GET al endpoint externo
+            String respuesta = restTemplate.getForObject(url, String.class);
+            return ResponseEntity.ok(respuesta);
+        } catch (Exception e) {
+            // Manejar errores en la solicitud
+            return ResponseEntity.status(500).body("Error al consultar el ambiente: " + e.getMessage());
+        }
+    }
 }
