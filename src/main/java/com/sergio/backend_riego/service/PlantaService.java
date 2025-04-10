@@ -52,7 +52,6 @@ public class PlantaService {
         dto.setNombre(planta.getNombre());
         dto.setTipo(planta.getTipo());
         dto.setUltimoRiego(planta.getUltimoRiego());
-        dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
 
         // Verificar y asignar los IDs de la bomba y el sensor

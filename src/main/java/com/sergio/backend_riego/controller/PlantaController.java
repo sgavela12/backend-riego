@@ -47,7 +47,6 @@ public class PlantaController {
         dto.setNombre(planta.getNombre());
         dto.setTipo(planta.getTipo());
         dto.setUltimoRiego(planta.getUltimoRiego());
-        dto.setHumedad(planta.getHumedad());
         dto.setNecesitaAgua(planta.isNecesitaAgua());
 
         // Verificar y asignar los IDs de la bomba y el sensor
@@ -212,6 +211,21 @@ public class PlantaController {
         } catch (Exception e) {
             // Manejar errores en la solicitud
             return ResponseEntity.status(500).body("Error al consultar el ambiente: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/humedad")
+    public ResponseEntity<Object> obtenerHumedad() {
+        String url = "http://192.168.1.146/humedad";
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            // Realizar la solicitud GET al endpoint externo
+            Object respuesta = restTemplate.getForObject(url, Object.class);
+            return ResponseEntity.ok(respuesta);
+        } catch (Exception e) {
+            // Manejar errores en la solicitud
+            return ResponseEntity.status(500).body("Error al consultar la humedad: " + e.getMessage());
         }
     }
 }

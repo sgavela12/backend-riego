@@ -37,8 +37,7 @@ public class Planta {
     @Column(name = "ultimo_riego", nullable = true) 
     private LocalDateTime ultimoRiego;
 
-    @Column(name = "humedad")
-    private Integer humedad;
+
 
     @Column(name = "necesita_agua", nullable = false)
     private boolean necesitaAgua;
