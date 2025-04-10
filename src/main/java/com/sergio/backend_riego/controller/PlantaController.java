@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -221,8 +223,27 @@ public class PlantaController {
 
         try {
             // Realizar la solicitud GET al endpoint externo
-            Object respuesta = restTemplate.getForObject(url, Object.class);
-            return ResponseEntity.ok(respuesta);
+            Map<String, Object> respuesta = restTemplate.getForObject(url, Map.class);
+
+            // Extraer la lista de sensores
+            List<Map<String, Object>> sensores = (List<Map<String, Object>>) respuesta.get("sensores");
+
+            // Transformar los datos para incluir el ID de la planta asociada, renombrar planta_id a id y eliminar sensor_id
+            List<Map<String, Object>> sensoresConPlanta = sensores.stream()
+                .map(sensor -> {
+                    Long sensorId = ((Number) sensor.get("sensor_id")).longValue();
+                    Optional<Planta> plantaOptional = plantaService.getPlantaBySensorId(sensorId);
+
+                    Map<String, Object> resultado = new LinkedHashMap<>(); // Usar LinkedHashMap para mantener el orden
+                    plantaOptional.ifPresent(planta -> resultado.put("id", planta.getId())); // Agregar el campo id primero
+                    resultado.put("humedad", sensor.get("humedad")); // Agregar el campo humedad
+
+                    return resultado;
+                })
+                .collect(Collectors.toList());
+
+            // Devolver la nueva estructura
+            return ResponseEntity.ok(Map.of("sensores", sensoresConPlanta));
         } catch (Exception e) {
             // Manejar errores en la solicitud
             return ResponseEntity.status(500).body("Error al consultar la humedad: " + e.getMessage());

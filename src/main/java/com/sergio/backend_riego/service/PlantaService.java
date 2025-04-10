@@ -35,6 +35,11 @@ public class PlantaService {
         return plantaRepository.findByBombaId(bombaId);
     }
 
+    // Obtener una planta por sensor ID
+    public Optional<Planta> getPlantaBySensorId(Long sensorId) {
+        return plantaRepository.findBySensorId(sensorId);
+    }
+
     // Crear o actualizar una planta
     public Planta savePlanta(Planta planta) {
         return plantaRepository.save(planta);
