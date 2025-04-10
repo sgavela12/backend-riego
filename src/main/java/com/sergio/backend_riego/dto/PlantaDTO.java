@@ -10,7 +10,6 @@ public class PlantaDTO {
     private String nombre;
     private String tipo;
     private LocalDateTime ultimoRiego;
-    private Integer humedad;
     private boolean necesitaAgua;
     private Long bombaId;  
     private Long sensorId; 
