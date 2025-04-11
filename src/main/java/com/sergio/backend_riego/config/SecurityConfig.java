@@ -12,10 +12,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/alexa/**").permitAll() // Permitir acceso a /alexa/**
-                .anyRequest().denyAll() 
+                .anyRequest().permitAll() // Permitir acceso a todas las rutas
             )
-            .csrf(csrf -> csrf.disable()); 
+            .csrf(csrf -> csrf.disable()); // Deshabilitar CSRF para simplificar las pruebas
 
         return http.build();
     }
